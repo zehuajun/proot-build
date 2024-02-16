@@ -9,6 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      - name: 拉取存储库
+        run: |
+          git clone https://gitlab.com/proot/proot.git work
+          cd work && git checkout origin/release/v5.3.1 && cd ..
+
       - name: 启动 docker
         run: docker run -i -d --name=gcc --tmpfs /tmp -v 'work:/w' gcc:7.4.0 bash
 
@@ -16,11 +21,6 @@ jobs:
         run: |
           docker exec gcc bash -c 'apt update -qq'
           docker exec gcc bash -c 'apt-get install -qq clang-tools-6.0 curl docutils-common gdb lcov libarchive-dev libtalloc-dev strace swig uthash-dev xsltproc'
-
-      - name: 拉取存储库
-        run: |
-          git clone https://gitlab.com/proot/proot.git ./work
-          cd work && git checkout origin/release/v5.3.1 && cd ..
 
       - name: 构建
         run: |
