@@ -10,7 +10,7 @@ jobs:
     
     steps:
       - name: 拉取存储库
-        run: git clone https://gitlab.com/proot/proot.git
+        run: git clone https://gitlab.com/proot/proot.git .
 
       - name: 构建
         run: |
