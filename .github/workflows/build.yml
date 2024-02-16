@@ -15,7 +15,9 @@ jobs:
           sudo apt-get install -qq curl docutils-common gdb lcov libarchive-dev libtalloc-dev strace swig uthash-dev xsltproc
 
       - name: 拉取存储库
-        run: git clone https://gitlab.com/proot/proot.git .
+        run: |
+          git clone https://gitlab.com/proot/proot.git .
+          git checkout origin/release/v5.3.1
 
       - name: 构建
         run: |
