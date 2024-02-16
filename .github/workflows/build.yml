@@ -24,8 +24,6 @@ jobs:
         run: |
           docker exec gcc bash -c 'LDFLAGS="${LDFLAGS} -static" make -C /proot/src proot'
           docker exec gcc bash -c "cp proot/src/proot /w/"
-          sha256sum work/proot > work/proot.sha256sum
-          md5sum work/proot > work/proot.md5sum
 
       - name: 下载产物
         uses: actions/upload-artifact@v4
