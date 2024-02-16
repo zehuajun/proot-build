@@ -10,12 +10,12 @@ jobs:
     
     steps:
       - name: 启动 docker
-        run: docker run --name=gcc --tmpfs /tmp -v work:/home/work  gcc:7.4.0
+        run: docker run -d --name=gcc --tmpfs /tmp -v work:/home/work  gcc:7.4.0
 
       - name: 安装依赖
         run: |
-          docker exec gcc bash apt update -y
-          docker exec gcc bash apt-get install -qq curl docutils-common gdb lcov libarchive-dev libtalloc-dev strace swig uthash-dev xsltproc
+          docker exec gcc apt update -qq
+          docker exec gcc apt-get install -qq clang-tools-6.0 curl docutils-common gdb lcov libarchive-dev libtalloc-dev strace swig uthash-dev xsltproc
 
       - name: 拉取存储库
         run: |
@@ -24,7 +24,7 @@ jobs:
 
       - name: 构建
         run: |
-          docker exec gcc bash LDFLAGS="${LDFLAGS} -static" make -C src proot
+          docker exec gcc LDFLAGS="${LDFLAGS} -static" make -C src proot
           mkdir -p dist
           cp work/src/proot dist/
           cd dist
