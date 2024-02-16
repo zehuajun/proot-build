@@ -9,31 +9,26 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: 拉取存储库
-        run: |
-          git clone https://gitlab.com/proot/proot.git work
-          chmod 777 work
-
       - name: 启动 docker
         run: docker run --privileged=true -i -d --name=gcc --tmpfs /tmp -v 'work:/w' gcc:7.4.0 bash
 
       - name: 安装依赖
         run: |
           docker exec gcc bash -c 'apt update -qq'
-          docker exec gcc bash -c 'apt-get install -qq clang-tools-6.0 curl docutils-common gdb lcov libarchive-dev libtalloc-dev strace swig uthash-dev xsltproc'
+          docker exec gcc bash -c 'apt-get install -qq git clang-tools-6.0 curl docutils-common gdb lcov libarchive-dev libtalloc-dev strace swig uthash-dev xsltproc'
+
+      - name: 拉取存储库
+        run: git clone https://gitlab.com/proot/proot.git
 
       - name: 构建
         run: |
-          docker exec gcc bash -c "ls /w"
-          docker exec gcc bash -c 'LDFLAGS="${LDFLAGS} -static" make -C /w/src proot'
-          mkdir -p dist
-          cp work/src/proot dist/
-          cd dist
-          sha256sum ./proot > proot.sha256sum
-          md5sum ./proot > proot.md5sum
+          docker exec gcc bash -c 'LDFLAGS="${LDFLAGS} -static" make -C proot/src proot'
+          docker exec gcc bash -c "cp proot/src/proot /w/"
+          sha256sum /w/proot > /w/proot.sha256sum
+          md5sum /w/proot > /w/proot.md5sum
 
       - name: 下载产物
         uses: actions/upload-artifact@v4
         with:
           name: Build
-          path: ./dist/*
+          path: /w/*
