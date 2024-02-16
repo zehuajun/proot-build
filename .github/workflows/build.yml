@@ -9,6 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      - name: 安装依赖
+        run: |
+          sudo apt update -y
+          sudo apt-get install -qq curl docutils-common gdb lcov libarchive-dev libtalloc-dev strace swig uthash-dev xsltproc
+
       - name: 拉取存储库
         run: git clone https://gitlab.com/proot/proot.git .
 
