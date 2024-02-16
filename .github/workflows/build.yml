@@ -9,21 +9,24 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      - name: 启动 docker
+        run: docker run --name=gcc --tmpfs /tmp -v work:/home/work  gcc:7.4.0
+
       - name: 安装依赖
         run: |
-          sudo apt update -y
-          sudo apt-get install -qq curl docutils-common gdb lcov libarchive-dev libtalloc-dev strace swig uthash-dev xsltproc
+          docker exec gcc bash apt update -y
+          docker exec gcc bash apt-get install -qq curl docutils-common gdb lcov libarchive-dev libtalloc-dev strace swig uthash-dev xsltproc
 
       - name: 拉取存储库
         run: |
-          git clone https://gitlab.com/proot/proot.git .
-          git checkout origin/release/v5.3.1
+          git clone https://gitlab.com/proot/proot.git ./work
+          cd work && git checkout origin/release/v5.3.1 && cd ..
 
       - name: 构建
         run: |
-          LDFLAGS="${LDFLAGS} -static" make -C src proot
+          docker exec gcc bash LDFLAGS="${LDFLAGS} -static" make -C src proot
           mkdir -p dist
-          cp src/proot dist/
+          cp work/src/proot dist/
           cd dist
           sha256sum ./proot > proot.sha256sum
           md5sum ./proot > proot.md5sum
