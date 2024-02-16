@@ -9,11 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: 启动 GCC
-        uses: Dup4/actions-setup-gcc@v1
-        with:
-          version: 7.4
-    
       - name: 安装依赖
         run: |
           sudo apt update -y
@@ -26,7 +21,7 @@ jobs:
 
       - name: 构建
         run: |
-          LDFLAGS="${LDFLAGS} -static" make -C src proot GIT=false
+          LDFLAGS="${LDFLAGS} -static" make -C src proot
           mkdir -p dist
           cp src/proot dist/
           cd dist
