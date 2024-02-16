@@ -18,17 +18,17 @@ jobs:
           docker exec gcc bash -c 'apt-get install -qq git clang-tools-6.0 curl docutils-common gdb lcov libarchive-dev libtalloc-dev strace swig uthash-dev xsltproc'
 
       - name: 拉取存储库
-        run: git clone https://gitlab.com/proot/proot.git
+        run: git clone https://gitlab.com/proot/proot.git /proot
 
       - name: 构建
         run: |
-          docker exec gcc bash -c 'LDFLAGS="${LDFLAGS} -static" make -C proot/src proot'
+          docker exec gcc bash -c 'LDFLAGS="${LDFLAGS} -static" make -C /proot/src proot'
           docker exec gcc bash -c "cp proot/src/proot /w/"
-          sha256sum /w/proot > /w/proot.sha256sum
-          md5sum /w/proot > /w/proot.md5sum
+          sha256sum work/proot > work/proot.sha256sum
+          md5sum work/proot > work/proot.md5sum
 
       - name: 下载产物
         uses: actions/upload-artifact@v4
         with:
           name: Build
-          path: /w/*
+          path: work/*
