@@ -24,7 +24,7 @@ jobs:
 
       - name: 构建
         run: |
-          docker exec gcc bash -c 'ls / && cd /w && LDFLAGS="${LDFLAGS} -static" make -C src proot'
+          docker exec gcc bash -c 'cd /w; LDFLAGS="${LDFLAGS} -static" make -C src proot'
           mkdir -p dist
           cp work/src/proot dist/
           cd dist
