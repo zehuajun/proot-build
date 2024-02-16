@@ -10,7 +10,7 @@ jobs:
     
     steps:
       - name: 启动 docker
-        run: docker run --privileged=true -i -d --name=gcc gcc:7.4.0 bash
+        run: docker run -i -d --name=gcc gcc:7.4.0 bash
 
       - name: 安装依赖
         run: |
