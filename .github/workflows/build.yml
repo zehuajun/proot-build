@@ -15,7 +15,7 @@ jobs:
           chmod 777 work
 
       - name: 启动 docker
-        run: docker run -i -d --name=gcc --tmpfs /tmp -v 'work:/w' gcc:7.4.0 bash
+        run: docker run --privileged=true -i -d --name=gcc --tmpfs /tmp -v 'work:/w' gcc:7.4.0 bash
 
       - name: 安装依赖
         run: |
