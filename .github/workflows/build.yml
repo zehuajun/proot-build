@@ -14,8 +14,8 @@ jobs:
 
       - name: 安装依赖
         run: |
-          docker exec gcc apt update -qq
-          docker exec gcc apt-get install -qq clang-tools-6.0 curl docutils-common gdb lcov libarchive-dev libtalloc-dev strace swig uthash-dev xsltproc
+          docker exec gcc bash -c 'apt update -qq'
+          docker exec gcc bash -c 'apt-get install -qq clang-tools-6.0 curl docutils-common gdb lcov libarchive-dev libtalloc-dev strace swig uthash-dev xsltproc'
 
       - name: 拉取存储库
         run: |
@@ -24,7 +24,7 @@ jobs:
 
       - name: 构建
         run: |
-          docker exec gcc LDFLAGS="${LDFLAGS} -static" make -C src proot
+          docker exec gcc bash -c 'LDFLAGS="${LDFLAGS} -static" make -C src proot'
           mkdir -p dist
           cp work/src/proot dist/
           cd dist
