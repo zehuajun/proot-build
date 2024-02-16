@@ -12,6 +12,7 @@ jobs:
       - name: 拉取存储库
         run: |
           git clone https://gitlab.com/proot/proot.git work
+          chmod 777 work
 
       - name: 启动 docker
         run: docker run -i -d --name=gcc --tmpfs /tmp -v 'work:/w' gcc:7.4.0 bash
