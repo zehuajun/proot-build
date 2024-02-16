@@ -12,7 +12,6 @@ jobs:
       - name: 拉取存储库
         run: |
           git clone https://gitlab.com/proot/proot.git work
-          cd work && git checkout origin/release/v5.3.1 && cd ..
 
       - name: 启动 docker
         run: docker run -i -d --name=gcc --tmpfs /tmp -v 'work:/w' gcc:7.4.0 bash
