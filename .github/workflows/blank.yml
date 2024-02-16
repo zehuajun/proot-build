@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 安装依赖
+        run: |
+          apt-get update -qq
+          apt-get install -qq clang-tools-6.0curl docutils-common gdb lcov libarchive-dev libtalloc-dev strace swig uthash-dev xsltproc
+
+      - name: 拉取存储库
+        run: git clone https://gitlab.com/proot/proot.git
+
+      - name: 构建
+        run: |
+          LDFLAGS="${LDFLAGS} -static" make -C src proot GIT=false
+          mkdir -p dist
+          cp src/proot dist/
+          cd dist
+          sha256sum ./proot > proot.sha256sum
+          md5sum ./proot > proot.md5sum
+
+      - name: 下载产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: Build
+          path: ./dist/*
